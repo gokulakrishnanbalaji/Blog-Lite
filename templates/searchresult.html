@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block home %}
+ 
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  {{ message[0] }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endwith %}
+
+<div>
+    <h1 class="text-center">Search Results for users</h1>
+    {% if users|length == 0 %}
+    <h2 class="text-center">No users found</h2>
+    {% endif %}
+    {% for user in users %}
+    <div class="container my-5 "">
+    <div class="card text-center" >
+      <div class="card-body bg-light ">
+        <form action="{{ url_for('viewprofile', username=user.username) }}" method="POST">
+          <button type="submit" class="btn btn-outline-success">{{user.username}}</button>
+          </form>
+
+        <p class="card-text">{{ user.email }}</p>
+      </div>
+      {% if user.username in following %}
+      <form action="{{ url_for('unfollow', username=user.username) }}" method="POST">
+      <button type="submit" class="btn btn-primary">Unfollow</button>
+      </form>
+      {% else %}
+      <form action="{{ url_for('follow', username=user.username) }}" method="POST">
+      <button type="submit" class="btn btn-primary">Follow</button>
+      </form>
+      {% endif %}
+    </div>
+    </div>
+
+    
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

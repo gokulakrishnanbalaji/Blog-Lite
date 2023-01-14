@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block profile %}
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  {{ message[0] }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endwith %}
+<div class="container align-items-center my-5">
+<h2 class="text-center">profile page</h2>
+
+
+<div class="container my-5 ">
+<div class="card text-center" >
+  <div class="card-body bg-light">
+    <h5 class="card-title">Username : {{ uname.username }}</h5>
+    {% if uname.profile_pic %}
+    <img src="{{ url_for('static', filename='profile_pics/profile.png') }}" alt="profile pic" class="img-thumbnail" style="width: 200px; height: 200px;">
+    {% else %}
+    <img src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="profile pic" class="img-thumbnail" style="width: 200px; height: 200px;">
+    {% endif %}
+    <h5 class="card-title my-5"> Email : {{ uname.email }}</h5>
+    <h5 class="card-title my-5"> Total posts : {{ posts_count }}</h5>
+    <h5 class="card-title my-5"> Total followers : {{ followers_count }}</h5>
+    <h5 class="card-title my-5"> Total following : {{ following_count }}</h5>
+
+    {% if flag %}
+  {% if flag1 %}
+  <form action="{{ url_for('unfollow', username=uname.username) }}" method="POST">
+  <button type="submit" class="btn btn-primary text-center btn-lg">Unfollow</button>
+  </form>
+  {% else %}
+  <form action="{{ url_for('follow', username=uname.username) }}" method="POST">
+  <button type="submit" class="btn btn-primary text-center btn-lg">Follow</button>
+  
+  </form>
+  </form>
+  {% endif %}
+  {% endif %}
+
+</div>
+</div>
+</div>
+</div>
+<div class="container">
+<h2 class="text-center">Followers</h2>
+{% for follower in followers %}
+<div class="container my-5">
+<div class="card text-center" >
+  <div class="card-body bg-light">
+    <form action="{{ url_for('viewprofile', username=follower.follower) }}" method="POST">
+      <button type="submit" class="btn btn-outline-success">{{follower.follower}}</button>
+      </form>
+
+</div>
+
+
+</div>
+</div>
+{% endfor %}
+</div>
+
+<div class="container ">
+    <h2 class="text-center">Followings</h2>
+    {% for following in followings %}
+    <div class="container my-5">
+    <div class="card text-center" >
+      <div class="card-body bg-light">
+        <form action="{{ url_for('viewprofile', username=following.following) }}" method="POST">
+          <button type="submit" class="btn btn-outline-success">{{following.following}}</button>
+          </form>
+    </div>
+    
+    
+    </div>
+    </div>
+    {% endfor %}
+    </div>
+
+<div class="container">
+<h2 class="text-center">Posts</h2>
+{% for post in posts %}
+<div class="container my-5">
+<div class="card text-center" >
+  <div class="card-body bg-light">
+    <h5 class="card-title">{{ post.title }}</h5>
+    {% if post.post_pic %}
+    {% set val = post.id | string() %}
+    <img src="{{ url_for('static', filename='post_pics/' + val + '.png') }}" class="img-thumbnail" style="width: 200px; height: 200px;" >
+    {% endif %}
+    <p class="card-text">{{ post.text }}</p>
+    <p class="card-text">Posted at {{ post.date_posted }}</p>
+  </div>
+</div>
+
+</div>
+{% endfor %}
+
+{% endblock %}

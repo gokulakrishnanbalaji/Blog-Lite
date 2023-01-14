@@ -1,0 +1,24 @@
+
+{% extends "base.html" %}
+{% block editpost %}
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  {{ message[0] }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endwith %}
+<div class="container align-items-center my-5">
+<h2 class="text-center">Edit post</h2>
+<form action="/editpost/{{ post.id }}" method="POST">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Title</label>
+    <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="title2" value="{{post.title}}">
+    <label for="exampleInputPassword1" class="form-label">Text</label>
+    <input type="text" class="form-control" id="exampleInputPassword1" name="text2" value="{{post.text}}">
+</div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}

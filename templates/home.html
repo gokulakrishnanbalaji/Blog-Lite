@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block home %}
+
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  {{ message[0] }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endwith %}
+
+
+<h1>Welcome {{ uname }}</h1>
+
+<h2 class="text-center">My posts</h2>
+{% if posts|length == 0 %}
+<h3 class="text-center my-5">No posts to show</h3>
+{% endif %}
+{% for post in posts %}
+<div class="container my-5">
+<div class="card text-center" >
+  <div class="card-body bg-light">
+    <h5 class="card-title">{{ post.title }}</h5>
+    {% if post.post_pic %}
+    {% set val = post.id | string() %}
+    <img src="{{ url_for('static', filename='post_pics/' + val + '.png') }}" class="img-thumbnail" style="width: 200px; height: 200px;" >
+    {% endif %}
+    <p class="card-text">{{ post.text }}</p>
+    <p class="card-text">Posted at {{ post.date_posted }}</p>
+  </div>
+
+    <form action="/delete/{{ post.id }}" method="post">
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+
+    <form action="/editpost/{{ post.id }}" method="get">
+        <button type="submit" class="btn btn-primary">Edit</button>
+    </form>
+
+
+</div>
+</div>
+{% endfor %}
+
+{% endblock %}

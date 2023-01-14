@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block myfeed %}
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div class="alert alert-info alert-dismissible fade show" role="alert">
+  {{ message[0] }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+{% endwith %}
+<div class="container align-items-center my-5">
+<h2 class="text-center ">My feed</h2>
+{% if posts|length == 0 %}
+<h3 class="text-center my-5">No posts to show</h3>
+{% endif %}
+{% for post in posts %}
+<div class="container my-5">
+<div class="card text-center" >
+  <div class="card-body bg-light ">
+    <h5 class="card-title">{{ post.title }}</h5>
+    {% if post.post_pic %}
+    {% set val = post.id | string() %}
+    <img src="{{ url_for('static', filename='post_pics/' + val + '.png') }}" class="img-thumbnail" style="width: 200px; height: 200px;" >
+    {% endif %}
+    <p class="card-text">{{ post.text }}</p>
+    <p class="card-text">Posted at {{ post.date_posted }}</p>
+    <div class="d-flex justify-content-center">
+    <form action="/viewprofile/{{ post.username }}" method="post">
+        <button type="submit" class="btn btn-outline-secondary">{{ post.username }}</button>
+    </form>
+
+
+</div>
+</div>
+
+</div>
+{% endfor %}
+</div>
+{% endblock %}
+
